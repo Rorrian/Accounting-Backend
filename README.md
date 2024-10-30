@@ -1,73 +1,65 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# BudgetBuddy (Домашняя бухгалтерия) — Backend Setup
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Описание
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Инструкция по установке и настройке backend для проекта **BudgetBuddy** — домашней бухгалтерии.
 
-## Description
+## Установка и настройка
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 1. Установка PostgreSQL и создание базы данных
 
-## Installation
+1. Установить PostgreSQL и pgAdmin: [Скачать PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads).
+2. Создать базу данных через pgAdmin.
+3. Обновить файл `.env` следующими настройками:
+   ```plaintext
+   DATABASE_URL=postgresql://postgres:123456@localhost:5432/auth-mk?schema=public
+   ```
 
-```bash
-$ pnpm install
-```
+#### Параметры подключения к БД:
 
-## Running the app
+- Name: auth-mk
+- Host: localhost
+- Port: 5432
+- Username: postgres
+- Password: 123456
 
-```bash
-# development
-$ pnpm run start
+### 2. Установка зависимостей и запуск проекта
 
-# watch mode
-$ pnpm run start:dev
+1. Установить зависимости:
+   ```plaintext
+   npm install
+   ```
+2. Синхронизировать базу данных с Prisma:
+   ```plaintext
+   npx prisma db push
+   ```
 
-# production mode
-$ pnpm run start:prod
-```
+### 3. Настройка API-токенов для авторизации через социальные сети
 
-## Test
+#### Google OAuth
 
-```bash
-# unit tests
-$ pnpm run test
+1. Перейти в [Google Develop Console](https://console.cloud.google.com/) и создайть проект или выбрать существующий.
 
-# e2e tests
-$ pnpm run test:e2e
+2. Открыть APIs & Services > Credentials: [Credentials](https://console.cloud.google.com/apis/dashboard).
 
-# test coverage
-$ pnpm run test:cov
-```
+3. Нажать Create Credentials и выбрать OAuth Client ID.
 
-## Support
+4. Настроить экран согласия OAuth (тип — external) и добавить Google-аккаунт в Test users.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+5. Вернуться на страницу Credentials и создать OAuth client ID:
 
-## Stay in touch
+- Authorized origins: http://localhost:4200
+- Authorized redirect URIs: http://localhost:4200/auth/google/callback
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+6. После создания получить Client ID и Client Secret.
 
-## License
+#### GitHub OAuth
 
-Nest is [MIT licensed](LICENSE).
+1. Перейти в GitHub Developer Settings и в разделе OAuth Apps нажать New OAuth App.
+2. Заполнить поля:
+
+- Application name
+- Homepage URL
+- Authorization callback URL
+
+3. Нажать Register application и получить Client ID и Client Secret.
