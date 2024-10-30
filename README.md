@@ -4,6 +4,8 @@
 
 Инструкция по установке и настройке backend для проекта **BudgetBuddy** — домашней бухгалтерии.
 
+[Фронтенд BudgetBuddy](https://github.com/Rorrian/Accounting)
+
 ## Установка и настройка
 
 ### 1. Установка PostgreSQL и создание базы данных
